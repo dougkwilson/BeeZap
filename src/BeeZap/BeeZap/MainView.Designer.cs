@@ -82,6 +82,7 @@
 			this.undoButton = new System.Windows.Forms.ToolStripButton();
 			this.deleteBackupsButton = new System.Windows.Forms.ToolStripButton();
 			this.clearLogButton = new System.Windows.Forms.ToolStripButton();
+			this.formToolTips = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.secondarySplitContainer)).BeginInit();
 			this.secondarySplitContainer.Panel1.SuspendLayout();
 			this.secondarySplitContainer.Panel2.SuspendLayout();
@@ -471,6 +472,7 @@
 			this.explicitCaptureCheckBox.Size = new System.Drawing.Size(99, 17);
 			this.explicitCaptureCheckBox.TabIndex = 5;
 			this.explicitCaptureCheckBox.Text = "Explicit Capture";
+			this.formToolTips.SetToolTip(this.explicitCaptureCheckBox, resources.GetString("explicitCaptureCheckBox.ToolTip"));
 			this.explicitCaptureCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// singlelineCheckBox
@@ -482,6 +484,8 @@
 			this.singlelineCheckBox.Size = new System.Drawing.Size(71, 17);
 			this.singlelineCheckBox.TabIndex = 4;
 			this.singlelineCheckBox.Text = "Singleline";
+			this.formToolTips.SetToolTip(this.singlelineCheckBox, "Changes the meaning of the dot (.) so it matches every character (instead of ever" +
+        "y character except \\n).\r\n");
 			this.singlelineCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// multilineCheckBox
@@ -493,6 +497,8 @@
 			this.multilineCheckBox.Size = new System.Drawing.Size(64, 17);
 			this.multilineCheckBox.TabIndex = 3;
 			this.multilineCheckBox.Text = "Multiline";
+			this.formToolTips.SetToolTip(this.multilineCheckBox, "Changes the meaning of ^ and $ so they match at the beginning and end, respective" +
+        "ly, of any line, and not just the beginning and end of the entire string.");
 			this.multilineCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// ignoreCaseCheckBox
@@ -799,6 +805,7 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox maxLineIncludeTextBox;
 		private System.Windows.Forms.TextBox minLineIncludeTextBox;
+		private System.Windows.Forms.ToolTip formToolTips;
 	}
 }
 
