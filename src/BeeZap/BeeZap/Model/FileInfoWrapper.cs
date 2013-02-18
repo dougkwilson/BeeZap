@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -61,14 +60,27 @@ namespace Beeline.BeeZap.Model
 			get { return _encoding ?? (_encoding = _fileSystem.GetEncoding(this)); }
 		}
 
+		public bool IsReadOnly { get { return (_fileInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly; } }
+		
+		public bool IsHidden { get { return (_fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden; } }
+
 		public void SetContent(String value)
 		{
 			if (value == null)
 			{
 				throw new ArgumentNullException();
 			}
-			_content = value;
-			_hasChanged = true;
+
+			if (IsReadOnly)
+			{
+				Status = FileStatus.Error;
+				StatusText = "is Read Only.";
+			}
+			else
+			{
+				_content = value;
+				_hasChanged = true;
+			}
 		}
 
 		public String GetContent()

@@ -23,6 +23,9 @@ namespace Beeline.BeeZap.Model
 		FileStatus Status { get; }
 		Encoding Encoding { get; }
 
+		Boolean IsReadOnly { get; }
+		Boolean IsHidden { get; }
+
 		void SaveChanges();
 		void Release();
 	}

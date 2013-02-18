@@ -25,8 +25,8 @@ namespace Beeline.BeeZap
 			_presenter.Loading();
 
 #if DEBUG
-			pathTextBox.Text = "C:\\TEMP\\html";
-			searchTextBox.Text = " | <a href=\"http://www.trade-schools.net/advertise.asp\" target=\"_blank\" rel=\"nofollow\">Advertise</a>";
+			pathTextBox.Text = @"C:\TEMP\tsca";
+			searchTextBox.Text = @"<br\W*?/?>(\r\n)?\W*?</td>";
 #endif
 		}
 

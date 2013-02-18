@@ -13,14 +13,16 @@ namespace Beeline.BeeZap.Model
 
 		private class UndoEntry
 		{
-			public UndoEntry(String backup, String original)
+			public UndoEntry(String backup, String original, FileAttributes attributes)
 			{
 				Backup = backup;
 				Original = original;
+				Attributes = attributes;
 			}
 
 			public String Backup { get; private set; }
 			public String Original { get; private set; }
+			public FileAttributes Attributes { get; private set; }
 		}
 
 		private readonly Stack<UndoEntry> _undo = new Stack<UndoEntry>();
@@ -57,9 +59,13 @@ namespace Beeline.BeeZap.Model
 				if (File.Exists(backupFileName))
 					continue;
 
+				FileAttributes attributes = File.GetAttributes(fileInfo.FullName);
+		
 				File.Move(fileInfo.FullName, backupFileName);
-				File.SetAttributes(backupFileName, FileAttributes.Hidden);
-				_undo.Push(new UndoEntry(backupFileName, fileInfo.FullName));
+				
+				File.SetAttributes(backupFileName, FileAttributes.Hidden | FileAttributes.ReadOnly);
+
+				_undo.Push(new UndoEntry(backupFileName, fileInfo.FullName, attributes));
 
 				break;
 			} while (++counter < 100);
@@ -72,6 +78,7 @@ namespace Beeline.BeeZap.Model
 				UndoEntry entry = _undo.Pop();
 				if (File.Exists(entry.Backup))
 				{
+					File.SetAttributes(entry.Backup, FileAttributes.Normal);
 					File.Delete(entry.Backup);
 				}
 			}
@@ -135,10 +142,12 @@ namespace Beeline.BeeZap.Model
 			while (_undo.Count > 0)
 			{
 				UndoEntry entry = _undo.Pop();
+
 				if (File.Exists(entry.Original))
 					File.Delete(entry.Original);
-
+		
 				File.Move(entry.Backup, entry.Original);
+				File.SetAttributes(entry.Original, entry.Attributes);
 			}
 		}
 
