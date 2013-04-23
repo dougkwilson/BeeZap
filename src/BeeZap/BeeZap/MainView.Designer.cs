@@ -54,7 +54,7 @@
 			this.contentExcludeExpressionLabel = new System.Windows.Forms.Label();
 			this.fileContentExcludeTextBox = new System.Windows.Forms.TextBox();
 			this.filtersGroupBox = new System.Windows.Forms.GroupBox();
-			this.fullNameExcludeTextBox = new System.Windows.Forms.TextBox();
+			this.fullNameExcludeTextBox = new System.Windows.Forms.ComboBox();
 			this.fullNameIncludeTextBox = new System.Windows.Forms.TextBox();
 			this.filenameExcludeExpressionLabel = new System.Windows.Forms.Label();
 			this.filenameIncludeExpressionLabel = new System.Windows.Forms.Label();
@@ -382,9 +382,15 @@
 			// 
 			this.fullNameExcludeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.fullNameExcludeTextBox.Items.AddRange(new object[] {
+            "(back ?up|preview|paused)",
+            "\\\\(Admin|Analytics|App_Browsers|App_Code|App_Data|App_Themes|Bin|Content|Framewor" +
+                "k|Includes|Scripts|Views)\\\\",
+            "(\\\\(Admin|Analytics|App_Browsers|App_Code|App_Data|App_Themes|Bin|Content|Framewo" +
+                "rk|Includes|Scripts|Views)\\\\|back ?up|preview|paused)"});
 			this.fullNameExcludeTextBox.Location = new System.Drawing.Point(58, 44);
 			this.fullNameExcludeTextBox.Name = "fullNameExcludeTextBox";
-			this.fullNameExcludeTextBox.Size = new System.Drawing.Size(757, 20);
+			this.fullNameExcludeTextBox.Size = new System.Drawing.Size(757, 21);
 			this.fullNameExcludeTextBox.TabIndex = 6;
 			// 
 			// fullNameIncludeTextBox
@@ -767,7 +773,7 @@
 		private System.Windows.Forms.Label contentExcludeExpressionLabel;
 		private System.Windows.Forms.TextBox fileContentExcludeTextBox;
 		private System.Windows.Forms.GroupBox filtersGroupBox;
-		private System.Windows.Forms.TextBox fullNameExcludeTextBox;
+		private System.Windows.Forms.ComboBox fullNameExcludeTextBox;
 		private System.Windows.Forms.TextBox fullNameIncludeTextBox;
 		private System.Windows.Forms.Label filenameExcludeExpressionLabel;
 		private System.Windows.Forms.Label filenameIncludeExpressionLabel;
