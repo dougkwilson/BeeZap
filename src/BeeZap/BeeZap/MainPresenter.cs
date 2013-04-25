@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -9,11 +8,13 @@ using System.Windows.Forms;
 using Beeline.BeeZap.Infrastructure;
 using Beeline.BeeZap.Model;
 using Beeline.BeeZap.Properties;
+using NLog;
 
 namespace Beeline.BeeZap
 {
 	public class MainPresenter
 	{
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private readonly IFileSystem _fileSystem;
 		private IMainView _mainView;
 		private Boolean _stopRequested;
@@ -31,7 +32,11 @@ namespace Beeline.BeeZap
 
 		public void Loading() { _mainView.UpdateControlStates(); }
 
-		private void Log(String message) { _mainView.UiThread(() => _mainView.AppendToLog(message + Environment.NewLine)); }
+		private void Log(String message)
+		{
+			Logger.Info(message);
+			_mainView.UiThread(() => _mainView.AppendToLog(message + Environment.NewLine));
+		}
 
 		public String ChoosePath()
 		{
@@ -50,6 +55,8 @@ namespace Beeline.BeeZap
 		public void ViewFiles()
 		{
 			Parameters parameters = _mainView.ReadParameters();
+			Log(parameters.ToString());
+
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new ViewFileInfoPipelineFactory(_fileSystem, parameters).Create();
 				ExecutePipeline(pipeline);
@@ -59,6 +66,8 @@ namespace Beeline.BeeZap
 		public void ViewMatches()
 		{
 			Parameters parameters = _mainView.ReadParameters();
+			Log(parameters.ToString());
+
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new ViewMatchesPipelineFactory(_fileSystem, parameters).Create();
 				ExecutePipeline(pipeline);
@@ -68,6 +77,8 @@ namespace Beeline.BeeZap
 		public void Replace()
 		{
 			Parameters parameters = _mainView.ReadParameters();
+			Log(parameters.ToString());
+
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new FindReplacePipelineFactory(_fileSystem, parameters).Create();
 				ExecutePipeline(pipeline);
