@@ -55,7 +55,7 @@ namespace Beeline.BeeZap
 		public void ViewFiles()
 		{
 			Parameters parameters = _mainView.ReadParameters();
-			Log(parameters.ToString());
+			Log(String.Format("Executing View Files:{0}{1}", Environment.NewLine, parameters));
 
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new ViewFileInfoPipelineFactory(_fileSystem, parameters).Create();
@@ -66,7 +66,7 @@ namespace Beeline.BeeZap
 		public void ViewMatches()
 		{
 			Parameters parameters = _mainView.ReadParameters();
-			Log(parameters.ToString());
+			Log(String.Format("Executing View Matches:{0}{1}", Environment.NewLine, parameters));
 
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new ViewMatchesPipelineFactory(_fileSystem, parameters).Create();
@@ -77,7 +77,7 @@ namespace Beeline.BeeZap
 		public void Replace()
 		{
 			Parameters parameters = _mainView.ReadParameters();
-			Log(parameters.ToString());
+			Log(String.Format("Executing Find/Replace:{0}{1}", Environment.NewLine, parameters));
 
 			if (ParametersAreValid(parameters)) {
 				Pipeline<IEnumerable<IFileInfo>> pipeline = new FindReplacePipelineFactory(_fileSystem, parameters).Create();
