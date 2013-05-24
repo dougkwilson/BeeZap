@@ -83,6 +83,7 @@
 			this.deleteBackupsButton = new System.Windows.Forms.ToolStripButton();
 			this.clearLogButton = new System.Windows.Forms.ToolStripButton();
 			this.formToolTips = new System.Windows.Forms.ToolTip(this.components);
+			this.undoCountToolStripLabel = new System.Windows.Forms.ToolStripLabel();
 			((System.ComponentModel.ISupportInitialize)(this.secondarySplitContainer)).BeginInit();
 			this.secondarySplitContainer.Panel1.SuspendLayout();
 			this.secondarySplitContainer.Panel2.SuspendLayout();
@@ -633,7 +634,8 @@
             this.stopButton,
             this.undoButton,
             this.deleteBackupsButton,
-            this.clearLogButton});
+            this.clearLogButton,
+            this.undoCountToolStripLabel});
 			this.toolStripButtons.Location = new System.Drawing.Point(0, 0);
 			this.toolStripButtons.Name = "toolStripButtons";
 			this.toolStripButtons.Size = new System.Drawing.Size(859, 55);
@@ -711,6 +713,12 @@
 			this.clearLogButton.Text = "deleteLog";
 			this.clearLogButton.ToolTipText = "Clear the log screen.";
 			this.clearLogButton.Click += new System.EventHandler(this.ClearLogButtonClick);
+			// 
+			// undoCountToolStripLabel
+			// 
+			this.undoCountToolStripLabel.Name = "undoCountToolStripLabel";
+			this.undoCountToolStripLabel.Size = new System.Drawing.Size(13, 52);
+			this.undoCountToolStripLabel.Text = "0";
 			// 
 			// MainView
 			// 
@@ -812,6 +820,7 @@
 		private System.Windows.Forms.TextBox maxLineIncludeTextBox;
 		private System.Windows.Forms.TextBox minLineIncludeTextBox;
 		private System.Windows.Forms.ToolTip formToolTips;
+		private System.Windows.Forms.ToolStripLabel undoCountToolStripLabel;
 	}
 }
 

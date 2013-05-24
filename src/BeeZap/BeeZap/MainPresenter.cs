@@ -19,29 +19,41 @@ namespace Beeline.BeeZap
 		private IMainView _mainView;
 		private Boolean _stopRequested;
 
-		public MainPresenter(IFileSystem fileSystem) { _fileSystem = fileSystem; }
-
-		public void Register(IMainView view)
-		{
-			if (view == null) {
-				throw new ArgumentNullException("view");
+		public MainPresenter(IFileSystem fileSystem) {
+			if (fileSystem == null) {
+				throw new ArgumentNullException("fileSystem");
 			}
-
-			_mainView = view;
+			_fileSystem = fileSystem;
 		}
 
-		public void Loading() { _mainView.UpdateControlStates(); }
+		public int BackupCount { get { return _fileSystem.GetPendingUndoCount(); } }
 
-		private void Log(String message)
-		{
+		public void Register(IMainView mainView) {
+			if (mainView == null) {
+				throw new ArgumentNullException("mainView");
+			}
+
+			_mainView = mainView;
+		}
+
+		public void Loading() {
+			_mainView.UpdateControlStates();
+			_mainView.UpdateBackupCount();
+		}
+
+		private void Log(Object obj) {
+			Log(obj.ToString());	
+		}
+
+		private void Log(String message) {
 			Logger.Info(message);
 			_mainView.UiThread(() => _mainView.AppendToLog(message + Environment.NewLine));
 		}
 
-		public String ChoosePath()
-		{
+		public String ChoosePath() {
 			using (var dialog = new FolderBrowserDialog {
-				ShowNewFolderButton = false, RootFolder = Environment.SpecialFolder.MyComputer
+				ShowNewFolderButton = false,
+				RootFolder = Environment.SpecialFolder.MyComputer
 			}) {
 				DialogResult result = dialog.ShowDialog(_mainView);
 				if (result == DialogResult.OK) {
@@ -52,8 +64,7 @@ namespace Beeline.BeeZap
 			return String.Empty;
 		}
 
-		public void ViewFiles()
-		{
+		public void ViewFiles() {
 			Parameters parameters = _mainView.ReadParameters();
 			Log(String.Format("Executing View Files:{0}{1}", Environment.NewLine, parameters));
 
@@ -63,8 +74,7 @@ namespace Beeline.BeeZap
 			}
 		}
 
-		public void ViewMatches()
-		{
+		public void ViewMatches() {
 			Parameters parameters = _mainView.ReadParameters();
 			Log(String.Format("Executing View Matches:{0}{1}", Environment.NewLine, parameters));
 
@@ -74,8 +84,7 @@ namespace Beeline.BeeZap
 			}
 		}
 
-		public void Replace()
-		{
+		public void Replace() {
 			Parameters parameters = _mainView.ReadParameters();
 			Log(String.Format("Executing Find/Replace:{0}{1}", Environment.NewLine, parameters));
 
@@ -85,8 +94,7 @@ namespace Beeline.BeeZap
 			}
 		}
 
-		private bool ParametersAreValid(Parameters parameters)
-		{
+		private bool ParametersAreValid(Parameters parameters) {
 			if (!_fileSystem.Exists(parameters.Path)) {
 				MessageBox.Show(_mainView, "The path does not exist.", "Hey! Pay attention!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				return false;
@@ -95,16 +103,15 @@ namespace Beeline.BeeZap
 			return true;
 		}
 
-		private void ExecutePipeline(Pipeline<IEnumerable<IFileInfo>> pipeline)
-		{
+		private void ExecutePipeline(Pipeline<IEnumerable<IFileInfo>> pipeline) {
 			var thread = new Thread(() => ExecutePipelineThreadProc(pipeline)) {
-				IsBackground = true, Name = "ExecutePipeline"
+				IsBackground = true,
+				Name = "ExecutePipeline"
 			};
 			thread.Start();
 		}
 
-		private void ExecutePipelineThreadProc(Pipeline<IEnumerable<IFileInfo>> pipeline)
-		{
+		private void ExecutePipelineThreadProc(Pipeline<IEnumerable<IFileInfo>> pipeline) {
 			Stopwatch sw = Stopwatch.StartNew();
 			Log("Started at " + SystemTime.Local());
 			var log = new StringBuilder();
@@ -146,37 +153,57 @@ namespace Beeline.BeeZap
 			} else {
 				Log("Stopped at " + SystemTime.Local() + "  Duration: " + sw.Elapsed);
 			}
+
+			_mainView.UpdateBackupCount();
 		}
 
-		public void Undo()
-		{
-			using (_mainView.BeginLongOperation()) {
-				_fileSystem.Undo();
+		public void Undo() {
+
+			if (ExecuteUndo(true)) {
+				DialogResult result = MessageBox.Show(_mainView, Resources.UndoChangesFailedText, Resources.UndoChangesFailedCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				if (result == DialogResult.Yes) {
+					ExecuteUndo(false);
+				}
 			}
+
 		}
 
-		public void DeleteBackups()
-		{
+		private Boolean ExecuteUndo(Boolean haltOnError) {
+			Boolean errorOccurred = false;
+			using (_mainView.BeginLongOperation()) {
+				foreach (UndoResult result in _fileSystem.Undo(haltOnError)) {
+					Log(result);
+					if (result.Failed) {
+						errorOccurred = true;
+					}
+				}
+			}
+			_mainView.UpdateBackupCount();
+			return errorOccurred;
+		}
+
+		public void DeleteBackups() {
 			DialogResult result = MessageBox.Show(_mainView, Resources.DeleteBackupConfirmationText, Resources.DeleteBackupsConfirmationCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (result == DialogResult.Yes) {
 				using (_mainView.BeginLongOperation()) {
 					_fileSystem.Commit();
+					_mainView.UpdateBackupCount();
 				}
 			}
 		}
 
-		public void ClearLog() { _mainView.ClearLog(); }
+		public void ClearLog() {
+			_mainView.ClearLog();
+		}
 
-		public void Stop()
-		{
+		public void Stop() {
 			_stopRequested = true;
 			if (_fileSystem.CanUndo()) {
 				MessageBox.Show(_mainView, "Files may have been modified before the operation was cancelled.", "Files Were Modified", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 
-		public void Quit()
-		{
+		public void Quit() {
 			if (_fileSystem.CanUndo()) {
 				DialogResult result = MessageBox.Show(_mainView, "Delete all the backup files before closing?", "Delete Backups?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (result == DialogResult.Yes) {
@@ -187,17 +214,14 @@ namespace Beeline.BeeZap
 			}
 		}
 
-		public void LogEntrySelected(IList<String> lines)
-		{
+		public void LogEntrySelected(IList<String> lines) {
 			Int32 left = lines[0].IndexOf('\t', 1) + 1;
-			if (left <= 0)
-			{
+			if (left <= 0) {
 				return;
 			}
 
 			Int32 right = lines[0].IndexOf('\t', left);
-			if (right <= 0)
-			{
+			if (right <= 0) {
 				return;
 			}
 

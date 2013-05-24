@@ -14,11 +14,13 @@ namespace Beeline.BeeZap.Model
 		void WriteFileContent(IFileInfo fileInfo, String content);
 
 		Boolean CanUndo();
-		void Undo();
 		void Commit();
+		IEnumerable<UndoResult> Undo(Boolean haltOnError);
+		Int32 GetPendingUndoCount();
 		Boolean Exists(String path);
 		
 		Boolean OpenInEditor(String path, String lineNumber, String column);
 		Encoding GetEncoding(IFileInfo fileInfoWrapper);
+
 	}
 }

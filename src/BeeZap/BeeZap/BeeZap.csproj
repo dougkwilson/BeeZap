@@ -83,6 +83,7 @@
     <Compile Include="Model\OperationBase.cs" />
     <Compile Include="Model\Pipeline.cs" />
     <Compile Include="Model\Preferences.cs" />
+    <Compile Include="Model\UndoResult.cs" />
     <Compile Include="Model\ViewFileInfoPipelineFactory.cs" />
     <Compile Include="Model\ViewMatchesPipelineFactory.cs" />
     <Compile Include="Model\Parameters.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Beeline.BeeZap.Infrastructure;
 using Beeline.BeeZap.Model;
@@ -65,6 +64,24 @@ namespace Beeline.BeeZap
 			};
 		}
 
+		public void UpdateBackupCount() {
+			this.UiThread(UpdateBackupCountImp);
+		}
+
+		private void UpdateBackupCountImp() {
+			var backupCount = _presenter.BackupCount;
+			if (backupCount > 0) {
+				undoCountToolStripLabel.Visible = true;
+				if (backupCount == 1)
+					undoCountToolStripLabel.Text = backupCount + " backup file";
+				else
+					undoCountToolStripLabel.Text = backupCount + " backup files";
+			} else {
+				undoCountToolStripLabel.Visible = false;
+				undoCountToolStripLabel.Text = "";
+			}
+		}
+
 		public void UpdateControlStates()
 		{
 			explicitCaptureCheckBox.Enabled = regularExpressionCheckBox.Checked;
@@ -93,9 +110,9 @@ namespace Beeline.BeeZap
 
 		private void BeginCancelableOperationImp()
 		{
-			foreach (ToolStripButton button in toolStripButtons.Items)
+			foreach (ToolStripItem item in toolStripButtons.Items)
 			{
-				button.Enabled = false;
+				item.Enabled = false;
 			}
 			stopButton.Enabled = true;
 		}
@@ -107,9 +124,9 @@ namespace Beeline.BeeZap
 
 		private void EndCancelableOperationImp()
 		{
-			foreach (ToolStripButton button in toolStripButtons.Items)
+			foreach (ToolStripItem item in toolStripButtons.Items)
 			{
-				button.Enabled = true;
+				item.Enabled = true;
 			}
 			stopButton.Enabled = false;
 		}

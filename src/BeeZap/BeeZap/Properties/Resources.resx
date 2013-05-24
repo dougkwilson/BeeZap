@@ -135,4 +135,10 @@
 	<data name="OpenInEditorFailedCaption">
 		<value xml:space="preserve">Open In Editor Failed</value>
 	</data>
+	<data name="UndoChangesFailedText" xml:space="preserve">
+    <value>A changed file could not be restored from backup.  Would you like to continue restoring the remaining backups?</value>
+  </data>
+	<data name="UndoChangesFailedCaption" xml:space="preserve">
+    <value>An error occured while restoring the backups</value>
+  </data>
 </root>

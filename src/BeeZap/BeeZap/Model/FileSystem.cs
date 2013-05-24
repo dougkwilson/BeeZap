@@ -13,16 +13,16 @@ namespace Beeline.BeeZap.Model
 
 		private class UndoEntry
 		{
-			public UndoEntry(String backup, String original, FileAttributes attributes)
+			public UndoEntry(String backupFileName, String originalFileName, FileAttributes originalAttributes)
 			{
-				Backup = backup;
-				Original = original;
-				Attributes = attributes;
+				BackupFileName = backupFileName;
+				OriginalFileName = originalFileName;
+				OriginalAttributes = originalAttributes;
 			}
 
-			public String Backup { get; private set; }
-			public String Original { get; private set; }
-			public FileAttributes Attributes { get; private set; }
+			public String BackupFileName { get; private set; }
+			public String OriginalFileName { get; private set; }
+			public FileAttributes OriginalAttributes { get; private set; }
 		}
 
 		private readonly Stack<UndoEntry> _undo = new Stack<UndoEntry>();
@@ -76,10 +76,10 @@ namespace Beeline.BeeZap.Model
 			while (_undo.Count > 0)
 			{
 				UndoEntry entry = _undo.Pop();
-				if (File.Exists(entry.Backup))
+				if (File.Exists(entry.BackupFileName))
 				{
-					File.SetAttributes(entry.Backup, FileAttributes.Normal);
-					File.Delete(entry.Backup);
+					File.SetAttributes(entry.BackupFileName, FileAttributes.Normal);
+					File.Delete(entry.BackupFileName);
 				}
 			}
 		}
@@ -137,25 +137,42 @@ namespace Beeline.BeeZap.Model
 			return _undo.Count > 0;
 		}
 
-		public void Undo()
-		{
+		public Int32 GetPendingUndoCount() { return _undo.Count; }
+
+		public IEnumerable<UndoResult> Undo(Boolean haltOnError) {
+
+			List<UndoResult> results = new List<UndoResult>();
+
 			while (_undo.Count > 0)
 			{
 				UndoEntry entry = _undo.Pop();
 
-				if (File.Exists(entry.Original))
-					File.Delete(entry.Original);
-		
-				File.Move(entry.Backup, entry.Original);
-				File.SetAttributes(entry.Original, entry.Attributes);
+				if (File.Exists(entry.BackupFileName)) {
+					if (File.Exists(entry.OriginalFileName))
+						File.Delete(entry.OriginalFileName);
+
+					File.Move(entry.BackupFileName, entry.OriginalFileName);
+					File.SetAttributes(entry.OriginalFileName, entry.OriginalAttributes);
+
+					results.Add(new UndoResult(false, "", entry.OriginalFileName, entry.BackupFileName));
+				} else {
+					results.Add(new UndoResult(true, "The backup file was missing. Undo halted.", entry.OriginalFileName, entry.BackupFileName));
+
+					if (haltOnError) {
+						_undo.Push(entry);
+						return results;
+					}
+				}
 			}
+
+			return results;
 		}
 
 		public IEnumerable<IFileInfo> EnumerateFileInfo(String path, String searchpattern, Boolean includeSubDirectories)
 		{
 			SearchOption option = includeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
-			return Directory.EnumerateFiles(path, searchpattern, option).Where(fi => _undo.All(u => u.Backup != fi)).Select(s => new FileInfoWrapper(this, new FileInfo(s), path));
+			return Directory.EnumerateFiles(path, searchpattern, option).Where(fi => _undo.All(u => u.BackupFileName != fi)).Select(s => new FileInfoWrapper(this, new FileInfo(s), path));
 		}
 
 		public IFileInfo GetFileInfo(String filename)

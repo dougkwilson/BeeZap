@@ -7,6 +7,7 @@ namespace Beeline.BeeZap
 	public interface IMainView : IView {
 		void AppendToLog(String message);
 		void ClearLog();
+		void UpdateBackupCount();
 
 		Parameters ReadParameters();
 
