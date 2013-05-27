@@ -1,4 +1,6 @@
-﻿namespace Beeline.BeeZap
+﻿using Beeline.BeeZap.Infrastructure;
+
+namespace Beeline.BeeZap
 {
 	partial class MainView
 	{
@@ -33,29 +35,29 @@
 			this.topTabControl = new System.Windows.Forms.TabControl();
 			this.filterTabPage = new System.Windows.Forms.TabPage();
 			this.pathGroupBox = new System.Windows.Forms.GroupBox();
-			this.patternTextBox = new System.Windows.Forms.TextBox();
+			this.patternTextBox = new BeeTextBox();
 			this.patternLabel = new System.Windows.Forms.Label();
 			this.browseButton = new System.Windows.Forms.Button();
-			this.pathTextBox = new System.Windows.Forms.TextBox();
+			this.pathTextBox = new BeeTextBox();
 			this.pathLabel = new System.Windows.Forms.Label();
 			this.subdirectoriesRadioButton = new System.Windows.Forms.RadioButton();
 			this.currentDirectoryRadioButton = new System.Windows.Forms.RadioButton();
 			this.contentFilterGroupBox = new System.Windows.Forms.GroupBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.maxLineExcludeTextBox = new System.Windows.Forms.TextBox();
-			this.minLineExcludeTextBox = new System.Windows.Forms.TextBox();
+			this.maxLineExcludeTextBox = new BeeTextBox();
+			this.minLineExcludeTextBox = new BeeTextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.maxLineIncludeTextBox = new System.Windows.Forms.TextBox();
-			this.minLineIncludeTextBox = new System.Windows.Forms.TextBox();
+			this.maxLineIncludeTextBox = new BeeTextBox();
+			this.minLineIncludeTextBox = new BeeTextBox();
 			this.contentIncludeExpressionLabel = new System.Windows.Forms.Label();
-			this.fileContentIncludeTextBox = new System.Windows.Forms.TextBox();
+			this.fileContentIncludeTextBox = new BeeTextBox();
 			this.contentExcludeExpressionLabel = new System.Windows.Forms.Label();
-			this.fileContentExcludeTextBox = new System.Windows.Forms.TextBox();
+			this.fileContentExcludeTextBox = new BeeTextBox();
 			this.filtersGroupBox = new System.Windows.Forms.GroupBox();
 			this.fullNameExcludeTextBox = new System.Windows.Forms.ComboBox();
-			this.fullNameIncludeTextBox = new System.Windows.Forms.TextBox();
+			this.fullNameIncludeTextBox = new BeeTextBox();
 			this.filenameExcludeExpressionLabel = new System.Windows.Forms.Label();
 			this.filenameIncludeExpressionLabel = new System.Windows.Forms.Label();
 			this.replaceTabPage = new System.Windows.Forms.TabPage();
