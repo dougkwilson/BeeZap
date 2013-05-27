@@ -51,10 +51,17 @@ namespace Beeline.BeeZap
 		}
 
 		public String ChoosePath() {
+
+			Parameters parameters = _mainView.ReadParameters();
+
 			using (var dialog = new FolderBrowserDialog {
-				ShowNewFolderButton = false,
-				RootFolder = Environment.SpecialFolder.MyComputer
+				ShowNewFolderButton = false
 			}) {
+				if (String.IsNullOrWhiteSpace(parameters.Path))
+					dialog.RootFolder = Environment.SpecialFolder.MyComputer;
+				else
+					dialog.SelectedPath = parameters.Path;
+
 				DialogResult result = dialog.ShowDialog(_mainView);
 				if (result == DialogResult.OK) {
 					return dialog.SelectedPath;
