@@ -82,8 +82,8 @@
 			this.undoButton = new System.Windows.Forms.ToolStripButton();
 			this.deleteBackupsButton = new System.Windows.Forms.ToolStripButton();
 			this.clearLogButton = new System.Windows.Forms.ToolStripButton();
-			this.formToolTips = new System.Windows.Forms.ToolTip(this.components);
 			this.undoCountToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+			this.formToolTips = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.secondarySplitContainer)).BeginInit();
 			this.secondarySplitContainer.Panel1.SuspendLayout();
 			this.secondarySplitContainer.Panel2.SuspendLayout();
@@ -541,6 +541,7 @@
 			this.searchTextBox.Name = "searchTextBox";
 			this.searchTextBox.Size = new System.Drawing.Size(789, 95);
 			this.searchTextBox.TabIndex = 0;
+			this.searchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTextBox_KeyDown);
 			// 
 			// replaceGroupBox
 			// 
@@ -577,6 +578,7 @@
 			this.replaceTextBox.Name = "replaceTextBox";
 			this.replaceTextBox.Size = new System.Drawing.Size(789, 83);
 			this.replaceTextBox.TabIndex = 0;
+			this.replaceTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.replaceTextBox_KeyDown);
 			// 
 			// iconList
 			// 

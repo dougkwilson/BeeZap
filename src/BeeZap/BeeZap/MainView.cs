@@ -220,5 +220,19 @@ namespace Beeline.BeeZap
 
 			_presenter.LogEntrySelected(lines);
 		}
+
+		private void searchTextBox_KeyDown(object sender, KeyEventArgs e) {
+			if (e.Control && e.KeyCode == Keys.A) {
+				searchTextBox.SelectAll();
+				e.SuppressKeyPress = true;
+			}
+		}
+
+		private void replaceTextBox_KeyDown(object sender, KeyEventArgs e) {
+			if (e.Control && e.KeyCode == Keys.A) {
+				replaceTextBox.SelectAll();
+				e.SuppressKeyPress = true;
+			}
+		}
 	}
 }
