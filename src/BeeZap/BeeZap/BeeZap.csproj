@@ -52,6 +52,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\BeeTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Model\FileInfoPipelineFactory.cs" />
     <Compile Include="Model\FileInfoWrapper.cs" />
     <Compile Include="Model\FilesPipeline.cs" />
