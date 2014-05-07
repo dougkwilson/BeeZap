@@ -128,6 +128,7 @@ namespace Beeline.BeeZap.Model
 		public Encoding GetEncoding(IFileInfo fileInfoWrapper)
 		{
 			using (StreamReader sr = new StreamReader(fileInfoWrapper.FullName, true)) {
+				sr.ReadLine();
 				return sr.CurrentEncoding;
 			}
 		}

@@ -130,12 +130,12 @@ namespace Beeline.BeeZap
 				Int32 counter = 0;
 				foreach (IFileInfo fileInfo in pipeline.Execute(null)) {
 					if (fileInfo.Status == FileStatus.Error) {
-						errors.AppendLine(String.Format("{0} {1}", fileInfo.FullName, fileInfo.StatusText));
+						errors.AppendLine(String.Format("{0} {1}", fileInfo.FullName, fileInfo.StatusText.NullTrim()));
 					} else {
 						if (fileInfo.HasChanged) {
 							fileInfo.SaveChanges();
 						}
-						log.AppendLine(String.Format("{0,6}\t{1}\t{2}", ++counter, fileInfo.FullName, fileInfo.StatusText.NullTrim()));
+						log.AppendLine(String.Format("{0,6}\t{1}\t{2}\t{3}", ++counter, fileInfo.FullName, fileInfo.Encoding.BodyName, fileInfo.StatusText.NullTrim()));
 					}
 
 					fileInfo.Release();
