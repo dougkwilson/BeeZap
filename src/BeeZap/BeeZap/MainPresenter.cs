@@ -135,7 +135,7 @@ namespace Beeline.BeeZap
 						if (fileInfo.HasChanged) {
 							fileInfo.SaveChanges();
 						}
-						log.AppendLine(String.Format("{0,6}\t{1}\t{2}\t{3}", ++counter, fileInfo.FullName, fileInfo.Encoding.BodyName, fileInfo.StatusText.NullTrim()));
+						log.AppendLine(String.Format("{0,6}\t{1}\t{2}\t{3}", ++counter, fileInfo.FullName, fileInfo.Encoding.WebName, fileInfo.StatusText.NullTrim()));
 					}
 
 					fileInfo.Release();

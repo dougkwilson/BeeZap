@@ -12,21 +12,36 @@ namespace Beeline.BeeZap.Model
 		public String Pattern { get; set; }
 		public String FullNameIncludePattern { get; set; }
 		public String FullNameExcludePattern { get; set; }
+		
 		public String FileContentIncludePattern { get; set; }
+		public Boolean FileContentIncludeExplicitCapture { get; set; }
+		public Boolean FileContentIncludeIgnoreCase { get; set; }
+		public Boolean FileContentIncludeSingleline { get; set; }
+		public Boolean FileContentIncludeMultiline { get; set; }
+
+		public String FileContentExcludePattern { get; set; }
+		public Boolean FileContentExcludeExplicitCapture { get; set; }
+		public Boolean FileContentExcludeIgnoreCase { get; set; }
+		public Boolean FileContentExcludeSingleline { get; set; }
+		public Boolean FileContentExcludeMultiline { get; set; }
+
 		public Int32 FileContentIncludeMinLine { get; set; }
 		public Int32 FileContentIncludeMaxLine { get; set; }
-		public String FileContentExcludePattern { get; set; }
 		public Int32 FileContentExcludeMinLine { get; set; }
 		public Int32 FileContentExcludeMaxLine { get; set; }
-		public String FindPattern { get; set; }
+
 		public Boolean IsRegex { get; set; }
+
+		public String FindPattern { get; set; }
 		public Boolean ExplicitCapture { get; set; }
 		public Boolean IgnoreCase { get; set; }
 		public Boolean Singleline { get; set; }
 		public Boolean Multiline { get; set; }
+
 		public String ReplacePattern { get; set; }
 		public Boolean LiteralReplacement { get; set; }
 
+		// ToDo This needs to be refactored into something reusable
 		public RegexOptions GetRegexOptions()
 		{
 			RegexOptions options = RegexOptions.None;
@@ -37,6 +52,36 @@ namespace Beeline.BeeZap.Model
 			if (Multiline)
 				options |= RegexOptions.Multiline;
 			if (Singleline)
+				options |= RegexOptions.Singleline;
+
+			return options;
+		}
+
+		public RegexOptions GetFileContentIncludeOptions()
+		{
+			RegexOptions options = RegexOptions.None;
+			if (FileContentIncludeExplicitCapture)
+				options |= RegexOptions.ExplicitCapture;
+			if (FileContentIncludeIgnoreCase)
+				options |= RegexOptions.IgnoreCase;
+			if (FileContentIncludeMultiline)
+				options |= RegexOptions.Multiline;
+			if (FileContentIncludeSingleline)
+				options |= RegexOptions.Singleline;
+
+			return options;
+		}
+
+		public RegexOptions GetFileContentExcludeOptions()
+		{
+			RegexOptions options = RegexOptions.None;
+			if (FileContentExcludeExplicitCapture)
+				options |= RegexOptions.ExplicitCapture;
+			if (FileContentExcludeIgnoreCase)
+				options |= RegexOptions.IgnoreCase;
+			if (FileContentExcludeMultiline)
+				options |= RegexOptions.Multiline;
+			if (FileContentExcludeSingleline)
 				options |= RegexOptions.Singleline;
 
 			return options;
@@ -69,5 +114,6 @@ namespace Beeline.BeeZap.Model
 
 			return b.ToString();
 		}
+
 	}
 }

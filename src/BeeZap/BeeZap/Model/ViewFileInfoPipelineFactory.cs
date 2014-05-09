@@ -17,11 +17,11 @@ namespace Beeline.BeeZap.Model
 			}
 
 			if (!String.IsNullOrWhiteSpace(parameters.FileContentIncludePattern)) {
-				Pipeline.Register(new LinesMatchRegex(new Regex(parameters.FileContentIncludePattern, RegexOptions.IgnoreCase), parameters.FileContentIncludeMinLine, parameters.FileContentIncludeMaxLine));
+				Pipeline.Register(new LinesMatchRegex(new Regex(parameters.FileContentIncludePattern, parameters.GetFileContentIncludeOptions()), parameters.FileContentIncludeMinLine, parameters.FileContentIncludeMaxLine));
 			}
 
 			if (!String.IsNullOrWhiteSpace(parameters.FileContentExcludePattern)) {
-				Pipeline.Register(new LinesDoNotMatchRegex(new Regex(parameters.FileContentExcludePattern, RegexOptions.IgnoreCase), parameters.FileContentExcludeMinLine, parameters.FileContentExcludeMaxLine));
+				Pipeline.Register(new LinesDoNotMatchRegex(new Regex(parameters.FileContentExcludePattern, parameters.GetFileContentExcludeOptions()), parameters.FileContentExcludeMinLine, parameters.FileContentExcludeMaxLine));
 			}
 
 		}

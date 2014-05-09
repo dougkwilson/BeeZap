@@ -35,29 +35,29 @@ namespace Beeline.BeeZap
 			this.topTabControl = new System.Windows.Forms.TabControl();
 			this.filterTabPage = new System.Windows.Forms.TabPage();
 			this.pathGroupBox = new System.Windows.Forms.GroupBox();
-			this.patternTextBox = new BeeTextBox();
+			this.patternTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.patternLabel = new System.Windows.Forms.Label();
 			this.browseButton = new System.Windows.Forms.Button();
-			this.pathTextBox = new BeeTextBox();
+			this.pathTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.pathLabel = new System.Windows.Forms.Label();
 			this.subdirectoriesRadioButton = new System.Windows.Forms.RadioButton();
 			this.currentDirectoryRadioButton = new System.Windows.Forms.RadioButton();
 			this.contentFilterGroupBox = new System.Windows.Forms.GroupBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.maxLineExcludeTextBox = new BeeTextBox();
-			this.minLineExcludeTextBox = new BeeTextBox();
+			this.maxLineExcludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
+			this.minLineExcludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.maxLineIncludeTextBox = new BeeTextBox();
-			this.minLineIncludeTextBox = new BeeTextBox();
+			this.maxLineIncludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
+			this.minLineIncludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.contentIncludeExpressionLabel = new System.Windows.Forms.Label();
-			this.fileContentIncludeTextBox = new BeeTextBox();
+			this.fileContentIncludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.contentExcludeExpressionLabel = new System.Windows.Forms.Label();
-			this.fileContentExcludeTextBox = new BeeTextBox();
+			this.fileContentExcludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.filtersGroupBox = new System.Windows.Forms.GroupBox();
 			this.fullNameExcludeTextBox = new System.Windows.Forms.ComboBox();
-			this.fullNameIncludeTextBox = new BeeTextBox();
+			this.fullNameIncludeTextBox = new Beeline.BeeZap.Infrastructure.BeeTextBox();
 			this.filenameExcludeExpressionLabel = new System.Windows.Forms.Label();
 			this.filenameIncludeExpressionLabel = new System.Windows.Forms.Label();
 			this.replaceTabPage = new System.Windows.Forms.TabPage();
@@ -86,6 +86,14 @@ namespace Beeline.BeeZap
 			this.clearLogButton = new System.Windows.Forms.ToolStripButton();
 			this.undoCountToolStripLabel = new System.Windows.Forms.ToolStripLabel();
 			this.formToolTips = new System.Windows.Forms.ToolTip(this.components);
+			this.fileContentIncludeExplicitCaptureCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentIncludeSinglelineCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentIncludeMultilineCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentIncludeIgnoreCaseCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentExcludeExplicitCaptureCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentExcludeSinglelineCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentExcludeMultilineCheckBox = new System.Windows.Forms.CheckBox();
+			this.fileContentExcludeIgnoreCaseCheckBox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.secondarySplitContainer)).BeginInit();
 			this.secondarySplitContainer.Panel1.SuspendLayout();
 			this.secondarySplitContainer.Panel2.SuspendLayout();
@@ -243,6 +251,14 @@ namespace Beeline.BeeZap
 			// 
 			this.contentFilterGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.contentFilterGroupBox.Controls.Add(this.fileContentExcludeExplicitCaptureCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentExcludeSinglelineCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentExcludeMultilineCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentExcludeIgnoreCaseCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentIncludeExplicitCaptureCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentIncludeSinglelineCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentIncludeMultilineCheckBox);
+			this.contentFilterGroupBox.Controls.Add(this.fileContentIncludeIgnoreCaseCheckBox);
 			this.contentFilterGroupBox.Controls.Add(this.label3);
 			this.contentFilterGroupBox.Controls.Add(this.label4);
 			this.contentFilterGroupBox.Controls.Add(this.maxLineExcludeTextBox);
@@ -724,6 +740,108 @@ namespace Beeline.BeeZap
 			this.undoCountToolStripLabel.Size = new System.Drawing.Size(13, 52);
 			this.undoCountToolStripLabel.Text = "0";
 			// 
+			// fileContentIncludeExplicitCaptureCheckBox
+			// 
+			this.fileContentIncludeExplicitCaptureCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentIncludeExplicitCaptureCheckBox.AutoSize = true;
+			this.fileContentIncludeExplicitCaptureCheckBox.Location = new System.Drawing.Point(290, 47);
+			this.fileContentIncludeExplicitCaptureCheckBox.Name = "fileContentIncludeExplicitCaptureCheckBox";
+			this.fileContentIncludeExplicitCaptureCheckBox.Size = new System.Drawing.Size(99, 17);
+			this.fileContentIncludeExplicitCaptureCheckBox.TabIndex = 30;
+			this.fileContentIncludeExplicitCaptureCheckBox.Text = "Explicit Capture";
+			this.formToolTips.SetToolTip(this.fileContentIncludeExplicitCaptureCheckBox, resources.GetString("fileContentIncludeExplicitCaptureCheckBox.ToolTip"));
+			this.fileContentIncludeExplicitCaptureCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentIncludeSinglelineCheckBox
+			// 
+			this.fileContentIncludeSinglelineCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentIncludeSinglelineCheckBox.AutoSize = true;
+			this.fileContentIncludeSinglelineCheckBox.Location = new System.Drawing.Point(484, 47);
+			this.fileContentIncludeSinglelineCheckBox.Name = "fileContentIncludeSinglelineCheckBox";
+			this.fileContentIncludeSinglelineCheckBox.Size = new System.Drawing.Size(71, 17);
+			this.fileContentIncludeSinglelineCheckBox.TabIndex = 29;
+			this.fileContentIncludeSinglelineCheckBox.Text = "Singleline";
+			this.formToolTips.SetToolTip(this.fileContentIncludeSinglelineCheckBox, "Changes the meaning of the dot (.) so it matches every character (instead of ever" +
+        "y character except \\n).\r\n");
+			this.fileContentIncludeSinglelineCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentIncludeMultilineCheckBox
+			// 
+			this.fileContentIncludeMultilineCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentIncludeMultilineCheckBox.AutoSize = true;
+			this.fileContentIncludeMultilineCheckBox.Location = new System.Drawing.Point(561, 47);
+			this.fileContentIncludeMultilineCheckBox.Name = "fileContentIncludeMultilineCheckBox";
+			this.fileContentIncludeMultilineCheckBox.Size = new System.Drawing.Size(64, 17);
+			this.fileContentIncludeMultilineCheckBox.TabIndex = 28;
+			this.fileContentIncludeMultilineCheckBox.Text = "Multiline";
+			this.formToolTips.SetToolTip(this.fileContentIncludeMultilineCheckBox, "Changes the meaning of ^ and $ so they match at the beginning and end, respective" +
+        "ly, of any line, and not just the beginning and end of the entire string.");
+			this.fileContentIncludeMultilineCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentIncludeIgnoreCaseCheckBox
+			// 
+			this.fileContentIncludeIgnoreCaseCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentIncludeIgnoreCaseCheckBox.AutoSize = true;
+			this.fileContentIncludeIgnoreCaseCheckBox.Checked = true;
+			this.fileContentIncludeIgnoreCaseCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.fileContentIncludeIgnoreCaseCheckBox.Location = new System.Drawing.Point(395, 47);
+			this.fileContentIncludeIgnoreCaseCheckBox.Name = "fileContentIncludeIgnoreCaseCheckBox";
+			this.fileContentIncludeIgnoreCaseCheckBox.Size = new System.Drawing.Size(83, 17);
+			this.fileContentIncludeIgnoreCaseCheckBox.TabIndex = 27;
+			this.fileContentIncludeIgnoreCaseCheckBox.Text = "Ignore Case";
+			this.fileContentIncludeIgnoreCaseCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentExcludeExplicitCaptureCheckBox
+			// 
+			this.fileContentExcludeExplicitCaptureCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentExcludeExplicitCaptureCheckBox.AutoSize = true;
+			this.fileContentExcludeExplicitCaptureCheckBox.Location = new System.Drawing.Point(289, 99);
+			this.fileContentExcludeExplicitCaptureCheckBox.Name = "fileContentExcludeExplicitCaptureCheckBox";
+			this.fileContentExcludeExplicitCaptureCheckBox.Size = new System.Drawing.Size(99, 17);
+			this.fileContentExcludeExplicitCaptureCheckBox.TabIndex = 34;
+			this.fileContentExcludeExplicitCaptureCheckBox.Text = "Explicit Capture";
+			this.formToolTips.SetToolTip(this.fileContentExcludeExplicitCaptureCheckBox, resources.GetString("fileContentExcludeExplicitCaptureCheckBox.ToolTip"));
+			this.fileContentExcludeExplicitCaptureCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentExcludeSinglelineCheckBox
+			// 
+			this.fileContentExcludeSinglelineCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentExcludeSinglelineCheckBox.AutoSize = true;
+			this.fileContentExcludeSinglelineCheckBox.Location = new System.Drawing.Point(483, 99);
+			this.fileContentExcludeSinglelineCheckBox.Name = "fileContentExcludeSinglelineCheckBox";
+			this.fileContentExcludeSinglelineCheckBox.Size = new System.Drawing.Size(71, 17);
+			this.fileContentExcludeSinglelineCheckBox.TabIndex = 33;
+			this.fileContentExcludeSinglelineCheckBox.Text = "Singleline";
+			this.formToolTips.SetToolTip(this.fileContentExcludeSinglelineCheckBox, "Changes the meaning of the dot (.) so it matches every character (instead of ever" +
+        "y character except \\n).\r\n");
+			this.fileContentExcludeSinglelineCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentExcludeMultilineCheckBox
+			// 
+			this.fileContentExcludeMultilineCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentExcludeMultilineCheckBox.AutoSize = true;
+			this.fileContentExcludeMultilineCheckBox.Location = new System.Drawing.Point(560, 99);
+			this.fileContentExcludeMultilineCheckBox.Name = "fileContentExcludeMultilineCheckBox";
+			this.fileContentExcludeMultilineCheckBox.Size = new System.Drawing.Size(64, 17);
+			this.fileContentExcludeMultilineCheckBox.TabIndex = 32;
+			this.fileContentExcludeMultilineCheckBox.Text = "Multiline";
+			this.formToolTips.SetToolTip(this.fileContentExcludeMultilineCheckBox, "Changes the meaning of ^ and $ so they match at the beginning and end, respective" +
+        "ly, of any line, and not just the beginning and end of the entire string.");
+			this.fileContentExcludeMultilineCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fileContentExcludeIgnoreCaseCheckBox
+			// 
+			this.fileContentExcludeIgnoreCaseCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.fileContentExcludeIgnoreCaseCheckBox.AutoSize = true;
+			this.fileContentExcludeIgnoreCaseCheckBox.Checked = true;
+			this.fileContentExcludeIgnoreCaseCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.fileContentExcludeIgnoreCaseCheckBox.Location = new System.Drawing.Point(394, 99);
+			this.fileContentExcludeIgnoreCaseCheckBox.Name = "fileContentExcludeIgnoreCaseCheckBox";
+			this.fileContentExcludeIgnoreCaseCheckBox.Size = new System.Drawing.Size(83, 17);
+			this.fileContentExcludeIgnoreCaseCheckBox.TabIndex = 31;
+			this.fileContentExcludeIgnoreCaseCheckBox.Text = "Ignore Case";
+			this.fileContentExcludeIgnoreCaseCheckBox.UseVisualStyleBackColor = true;
+			// 
 			// MainView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -775,18 +893,14 @@ namespace Beeline.BeeZap
 		private System.Windows.Forms.TabPage filterTabPage;
 		private System.Windows.Forms.GroupBox pathGroupBox;
 		private System.Windows.Forms.Button browseButton;
-		private System.Windows.Forms.TextBox pathTextBox;
 		private System.Windows.Forms.Label pathLabel;
 		private System.Windows.Forms.RadioButton subdirectoriesRadioButton;
 		private System.Windows.Forms.RadioButton currentDirectoryRadioButton;
 		private System.Windows.Forms.GroupBox contentFilterGroupBox;
 		private System.Windows.Forms.Label contentIncludeExpressionLabel;
-		private System.Windows.Forms.TextBox fileContentIncludeTextBox;
 		private System.Windows.Forms.Label contentExcludeExpressionLabel;
-		private System.Windows.Forms.TextBox fileContentExcludeTextBox;
 		private System.Windows.Forms.GroupBox filtersGroupBox;
 		private System.Windows.Forms.ComboBox fullNameExcludeTextBox;
-		private System.Windows.Forms.TextBox fullNameIncludeTextBox;
 		private System.Windows.Forms.Label filenameExcludeExpressionLabel;
 		private System.Windows.Forms.Label filenameIncludeExpressionLabel;
 		private System.Windows.Forms.TabPage replaceTabPage;
@@ -801,7 +915,6 @@ namespace Beeline.BeeZap
 		private System.Windows.Forms.GroupBox replaceGroupBox;
 		private System.Windows.Forms.CheckBox literalReplacementCheckBox;
 		private System.Windows.Forms.TextBox replaceTextBox;
-		private System.Windows.Forms.TextBox patternTextBox;
 		private System.Windows.Forms.Label patternLabel;
 		private System.Windows.Forms.ToolStrip toolStripButtons;
 		private System.Windows.Forms.ToolStripButton viewFilesButton;
@@ -817,14 +930,27 @@ namespace Beeline.BeeZap
 		private System.Windows.Forms.ToolStripButton stopButton;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox maxLineExcludeTextBox;
-		private System.Windows.Forms.TextBox minLineExcludeTextBox;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox maxLineIncludeTextBox;
-		private System.Windows.Forms.TextBox minLineIncludeTextBox;
 		private System.Windows.Forms.ToolTip formToolTips;
 		private System.Windows.Forms.ToolStripLabel undoCountToolStripLabel;
+		private System.Windows.Forms.CheckBox fileContentExcludeExplicitCaptureCheckBox;
+		private System.Windows.Forms.CheckBox fileContentExcludeSinglelineCheckBox;
+		private System.Windows.Forms.CheckBox fileContentExcludeMultilineCheckBox;
+		private System.Windows.Forms.CheckBox fileContentExcludeIgnoreCaseCheckBox;
+		private System.Windows.Forms.CheckBox fileContentIncludeExplicitCaptureCheckBox;
+		private System.Windows.Forms.CheckBox fileContentIncludeSinglelineCheckBox;
+		private System.Windows.Forms.CheckBox fileContentIncludeMultilineCheckBox;
+		private System.Windows.Forms.CheckBox fileContentIncludeIgnoreCaseCheckBox;
+		private BeeTextBox pathTextBox;
+		private BeeTextBox fileContentIncludeTextBox;
+		private BeeTextBox fileContentExcludeTextBox;
+		private BeeTextBox fullNameIncludeTextBox;
+		private BeeTextBox patternTextBox;
+		private BeeTextBox maxLineExcludeTextBox;
+		private BeeTextBox minLineExcludeTextBox;
+		private BeeTextBox maxLineIncludeTextBox;
+		private BeeTextBox minLineIncludeTextBox;
 	}
 }
 

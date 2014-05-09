@@ -40,7 +40,8 @@ namespace Beeline.BeeZap
 
 			Preferences prefs = new Preferences() {
 				TextEditorPath = ConfigurationManager.AppSettings["TextEditorPath"] ?? @"C:\Program Files (x86)\TextPad 6\TextPad.exe",
-				TextEditorArguments = ConfigurationManager.AppSettings["TextEditorArguments"] ?? "{path} ({line},{col})"
+				TextEditorArguments = ConfigurationManager.AppSettings["TextEditorArguments"] ?? "{path} ({line},{col})",
+				OutputEncoding = ConfigurationManager.AppSettings["OutputEncoding"] ?? "UseDetected"
 			};
 
 			IFileSystem fileSystem = new FileSystem(prefs);

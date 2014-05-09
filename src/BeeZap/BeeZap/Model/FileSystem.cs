@@ -4,11 +4,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
+using NLog;
 
 namespace Beeline.BeeZap.Model
 {
 	public class FileSystem : IFileSystem
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		private readonly IPreferences _preferences;
 
 		private class UndoEntry
@@ -39,45 +43,69 @@ namespace Beeline.BeeZap.Model
 
 		public void WriteFileContent(IFileInfo fileInfo, String content)
 		{
-			Backup(fileInfo);
+			var undoEntry = Backup(fileInfo);
 
 			if (File.Exists(fileInfo.FullName))
 				throw new ApplicationException(String.Format("Failed to backup the original file: {0}", fileInfo.FullName));
 
-			using (StreamWriter streamWriter = new StreamWriter(fileInfo.FullName, false, fileInfo.Encoding))
-			{
-				streamWriter.Write(content);
+			try {
+				Encoding encoding = GetOutputEncoding(fileInfo);
+
+				using (StreamWriter streamWriter = new StreamWriter(fileInfo.FullName, false, encoding)) {
+					streamWriter.Write(content);
+				}
+
+				_undo.Push(undoEntry);
+			}
+			catch (Exception ex) {
+				Restore(undoEntry);
+				throw;
 			}
 		}
 
-		private void Backup(IFileInfo fileInfo)
+		private UndoEntry Backup(IFileInfo fileInfo)
 		{
 			Int32 counter = 0;
-			do
-			{
+			do {
 				String backupFileName = Path.Combine(fileInfo.DirectoryName, String.Format("{0}-{1:00}{2}", Path.GetFileNameWithoutExtension(fileInfo.Name), counter, fileInfo.Extension));
 				if (File.Exists(backupFileName))
 					continue;
 
 				FileAttributes attributes = File.GetAttributes(fileInfo.FullName);
-		
+
 				File.Move(fileInfo.FullName, backupFileName);
-				
+
 				File.SetAttributes(backupFileName, FileAttributes.Hidden | FileAttributes.ReadOnly);
 
-				_undo.Push(new UndoEntry(backupFileName, fileInfo.FullName, attributes));
+				UndoEntry undoEntry = new UndoEntry(backupFileName, fileInfo.FullName, attributes);
 
-				break;
+				return undoEntry;
+
 			} while (++counter < 100);
+
+			throw new ApplicationException("Unable to backup the file because a temporary name could not be generated: " + fileInfo);
+		}
+
+		private Boolean Restore(UndoEntry entry)
+		{
+			if (File.Exists(entry.BackupFileName)) {
+				if (File.Exists(entry.OriginalFileName))
+					File.Delete(entry.OriginalFileName);
+
+				File.Move(entry.BackupFileName, entry.OriginalFileName);
+				File.SetAttributes(entry.OriginalFileName, entry.OriginalAttributes);
+
+				return true;
+			}
+
+			return false;
 		}
 
 		public void Commit()
 		{
-			while (_undo.Count > 0)
-			{
+			while (_undo.Count > 0) {
 				UndoEntry entry = _undo.Pop();
-				if (File.Exists(entry.BackupFileName))
-				{
+				if (File.Exists(entry.BackupFileName)) {
 					File.SetAttributes(entry.BackupFileName, FileAttributes.Normal);
 					File.Delete(entry.BackupFileName);
 				}
@@ -86,13 +114,11 @@ namespace Beeline.BeeZap.Model
 
 		public bool Exists(String path)
 		{
-			if (path == null)
-			{
+			if (path == null) {
 				throw new ArgumentNullException("path");
 			}
 
-			if (String.IsNullOrWhiteSpace(path))
-			{
+			if (String.IsNullOrWhiteSpace(path)) {
 				throw new ArgumentException("Path is required.", "path");
 			}
 
@@ -101,23 +127,20 @@ namespace Beeline.BeeZap.Model
 
 		public Boolean OpenInEditor(String path, String lineNumber, String column)
 		{
-			if (Exists(_preferences.TextEditorPath))
-			{
+			if (Exists(_preferences.TextEditorPath)) {
 				String arguments = _preferences.TextEditorArguments.Replace("{path}", path).Replace("{line}", lineNumber).Replace("{col}", column);
 				if (_preferences.TextEditorPath.IndexOf("textpad.exe", StringComparison.InvariantCultureIgnoreCase) > -1)
 					arguments = arguments.Replace("(,)", "").Replace(",)", ")");
 
 				ProcessStartInfo info = new ProcessStartInfo(_preferences.TextEditorPath, arguments.Trim());
-				try
-				{
+				try {
 					Process.Start(info);
 					return true;
 				}
 				// ReSharper disable EmptyGeneralCatchClause
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
 					// We're good with doing nothing here since opening the text editor is a convenience feature.  The inability to open it shouldn't crash/halt operations.
-					Debug.WriteLine(ex.Message);
+					_logger.WarnException("Failed to open the text editor.", ex);
 				}
 				// ReSharper restore EmptyGeneralCatchClause
 			}
@@ -127,9 +150,35 @@ namespace Beeline.BeeZap.Model
 
 		public Encoding GetEncoding(IFileInfo fileInfoWrapper)
 		{
-			using (StreamReader sr = new StreamReader(fileInfoWrapper.FullName, true)) {
-				sr.ReadLine();
-				return sr.CurrentEncoding;
+			try {
+				using (StreamReader sr = new StreamReader(fileInfoWrapper.FullName, true)) {
+					sr.ReadLine();
+					return sr.CurrentEncoding;
+				}
+			}
+			catch (IOException ex) {
+				_logger.WarnException("Could not determine file encoding from the file.  The Default encoding will be used.", ex);
+				return Encoding.Default;
+			}
+		}
+
+		private Encoding GetOutputEncoding(IFileInfo fileInfo)
+		{
+			switch (_preferences.OutputEncoding.ToUpper()) {
+				case "USEDETECTED":
+					return fileInfo.Encoding;
+				case "USEDEFAULT":
+					return Encoding.Default;
+				case "ASCII":
+					return Encoding.ASCII;
+			}
+
+			try {
+				return Encoding.GetEncoding(_preferences.OutputEncoding);
+			}
+			catch (ArgumentException ex) {
+				_logger.ErrorException("The configured OutputEncoding value '" + _preferences.OutputEncoding + "' does not map to an available encoding on this system.", ex);
+				throw;
 			}
 		}
 
@@ -140,21 +189,15 @@ namespace Beeline.BeeZap.Model
 
 		public Int32 GetPendingUndoCount() { return _undo.Count; }
 
-		public IEnumerable<UndoResult> Undo(Boolean haltOnError) {
+		public IEnumerable<UndoResult> Undo(Boolean haltOnError)
+		{
 
 			List<UndoResult> results = new List<UndoResult>();
 
-			while (_undo.Count > 0)
-			{
+			while (_undo.Count > 0) {
 				UndoEntry entry = _undo.Pop();
 
-				if (File.Exists(entry.BackupFileName)) {
-					if (File.Exists(entry.OriginalFileName))
-						File.Delete(entry.OriginalFileName);
-
-					File.Move(entry.BackupFileName, entry.OriginalFileName);
-					File.SetAttributes(entry.OriginalFileName, entry.OriginalAttributes);
-
+				if (Restore(entry)) {
 					results.Add(new UndoResult(false, "", entry.OriginalFileName, entry.BackupFileName));
 				} else {
 					results.Add(new UndoResult(true, "The backup file was missing. Undo halted.", entry.OriginalFileName, entry.BackupFileName));

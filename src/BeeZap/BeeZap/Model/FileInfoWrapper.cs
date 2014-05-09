@@ -116,7 +116,13 @@ namespace Beeline.BeeZap.Model
 			if (!_hasChanged)
 				throw new InvalidOperationException("The file has not been changed since it was last opened.");
 
-			_fileSystem.WriteFileContent(this, _content);
+			try {
+				_fileSystem.WriteFileContent(this, _content);
+			}
+			catch (Exception ex) {
+				Status = FileStatus.Error;
+				StatusText = "Failed to save the modified file: " + ex.Message;
+			}
 		}
 
 		public void Release()
