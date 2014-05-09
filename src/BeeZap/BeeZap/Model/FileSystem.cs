@@ -58,6 +58,7 @@ namespace Beeline.BeeZap.Model
 				_undo.Push(undoEntry);
 			}
 			catch (Exception ex) {
+				_logger.ErrorException("Failed to write the file: " + fileInfo, ex);
 				Restore(undoEntry);
 				throw;
 			}
