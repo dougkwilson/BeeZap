@@ -79,6 +79,8 @@ namespace Beeline.BeeZap
 		private void UpdateBackupCountImp() {
 			var backupCount = _presenter.BackupCount;
 			if (backupCount > 0) {
+				undoButton.Enabled = true;
+				deleteBackupsButton.Enabled = true;
 				undoCountToolStripLabel.Visible = true;
 				if (backupCount == 1)
 					undoCountToolStripLabel.Text = backupCount + " backup file";
@@ -87,6 +89,8 @@ namespace Beeline.BeeZap
 			} else {
 				undoCountToolStripLabel.Visible = false;
 				undoCountToolStripLabel.Text = "";
+				undoButton.Enabled = false;
+				deleteBackupsButton.Enabled = false;
 			}
 		}
 
